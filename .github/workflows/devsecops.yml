@@ -120,20 +120,18 @@ jobs:
             | grep -i "set-cookie" | grep "session=" \
             | sed 's/.*session=\([^;]*\).*/\1/')
           echo "SESSION_COOKIE=$COOKIE" >> $GITHUB_OUTPUT
-          echo "Sesion obtenida correctamente"
+          echo "Cookie obtenida: $COOKIE"
 
       - name: "DAST - OWASP ZAP Full Scan con autenticacion"
         uses: zaproxy/action-full-scan@v0.13.0
         with:
           target: "https://actividad-3-implementacion-devsecops.onrender.com"
           rules_file_name: ".zap/rules.tsv"
-          cmd_options: "-a"
+          cmd_options: "-a -H 'Cookie: session=${{ steps.auth.outputs.SESSION_COOKIE }}'"
           issue_title: "ZAP Full Scan Report"
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_action: false
           artifact_name: "zap-report-html"
-          zap_auth_header: "Cookie"
-          zap_auth_header_value: "session=${{ steps.auth.outputs.SESSION_COOKIE }}"
         continue-on-error: true
 
   deploy:
