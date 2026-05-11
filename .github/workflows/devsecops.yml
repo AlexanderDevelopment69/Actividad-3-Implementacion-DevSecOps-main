@@ -127,7 +127,7 @@ jobs:
         with:
           target: "https://actividad-3-implementacion-devsecops.onrender.com"
           rules_file_name: ".zap/rules.tsv"
-          cmd_options: "-a -H 'Cookie: session=${{ steps.auth.outputs.SESSION_COOKIE }}'"
+          cmd_options: "-a -z '-config replacer.full_list(0).description=auth -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=Cookie -config replacer.full_list(0).replacement=session=${{ steps.auth.outputs.SESSION_COOKIE }}'"
           issue_title: "ZAP Full Scan Report"
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_action: false
